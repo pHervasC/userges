@@ -19,19 +19,50 @@ export class UsuarioAdminRoutedComponent implements OnInit {
   page: number = 0; // 0-based server count
   totalPages: number = 0;
   arrBotonera: string[] = [];
+  click: boolean = false;
+  size: number = 10;
 
   constructor(private oUsuarioService: UsuarioService, private oBotoneraService: BotoneraService) {}
 
   ngOnInit() {
     this.getPage();
   }
+  getPageOrdenAlfabetico() {
+    if (!this.click) {
+      this.oUsuarioService.getPageOrdenAlfabeticoAsc(this.page, 10).subscribe({
+        next: (arrUsuario: IPage<IUsuario>) => {
+          this.arrUsuarios = arrUsuario.content;
+          this.arrBotonera = this.oBotoneraService.getBotonera(this.page, arrUsuario.totalPages);
+          this.totalPages = arrUsuario.totalPages;
+          this.click = true;
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
+    } else {
+      this.oUsuarioService.getPageOrdenAlfabeticoDesc(this.page, 10).subscribe({
+        next: (arrUsuario: IPage<IUsuario>) => {
+          this.arrUsuarios = arrUsuario.content;
+          this.arrBotonera = this.oBotoneraService.getBotonera(this.page, arrUsuario.totalPages);
+          this.totalPages = arrUsuario.totalPages;
+          this.click = false;
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      });
+    }
+  }
+
+
 
   getPage() {
-    this.oUsuarioService.getPage(this.page, 10).subscribe({
+    this.oUsuarioService.getPage(this.page, this.size - 1).subscribe({
       next: (arrUsuario: IPage<IUsuario>) => {
-        this.arrUsuarios = arrUsuario.content;      
+        this.arrUsuarios = arrUsuario.content;
         this.arrBotonera = this.oBotoneraService.getBotonera(this.page, arrUsuario.totalPages);
-        this.totalPages = arrUsuario.totalPages;        
+        this.totalPages = arrUsuario.totalPages;
       },
       error: (err) => {
         console.log(err);
