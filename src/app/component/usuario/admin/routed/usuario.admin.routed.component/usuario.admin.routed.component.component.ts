@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { IPage } from '../../../../../model/model.interface';
 import { FormsModule } from '@angular/forms';
 import { BotoneraService } from '../../../../../service/botonera.service';
+import { debounceTime, distinctUntilChanged, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-usuario.admin.routed',
@@ -21,11 +22,20 @@ export class UsuarioAdminRoutedComponent implements OnInit {
   arrBotonera: string[] = [];
   click: boolean = false;
   size: number = 10;
+  search: string = '';
+  private searchSubject = new Subject<string>();
 
   constructor(private oUsuarioService: UsuarioService, private oBotoneraService: BotoneraService) {}
 
   ngOnInit() {
     this.getPage();
+
+    this.searchSubject
+    .pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe((searchTerm) => {
+      this.search = searchTerm;
+      this.filtar();
+    });
   }
   getPageOrdenAlfabetico() {
     if (!this.click) {
@@ -97,4 +107,27 @@ export class UsuarioAdminRoutedComponent implements OnInit {
     this.getPage();
     return false;
   }
+
+  filtar() {
+    if (this.search) {
+      this.oUsuarioService.getSearch(this.size, this.search).subscribe({
+        next: (arrUsuario: IPage<IUsuario>) => {
+          this.arrUsuarios = arrUsuario.content;
+          this.arrBotonera = this.oBotoneraService.getBotonera(this.page, arrUsuario.totalPages);
+          this.totalPages = arrUsuario.totalPages;
+        },
+        error: (err: any) => {
+          console.log(err);
+        },
+      });
+    } else {
+      this.getPage();
+    }
+  }
+
+
+  onSearchChange(searchTerm: string) {
+    this.searchSubject.next(searchTerm);
+  }
+
 }

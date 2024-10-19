@@ -30,5 +30,9 @@ export class UsuarioService {
       'http://localhost:8085/usuario?page=' + page + '&size=' + size + '&sort=nombre,desc'
     );
   }
-
+  getSearch(size: number, search: string): Observable<IPage<IUsuario>> {
+    return this.oHttp.get<IPage<IUsuario>>(
+      'http://localhost:8085/usuario?size=' + size + '&filter=' + search
+    );
+}
 }
