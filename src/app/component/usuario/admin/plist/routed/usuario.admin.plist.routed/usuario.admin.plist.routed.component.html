@@ -96,9 +96,9 @@
                 <button class="btn btn-primary mx-2" (click)="editar(usuario)">
                   Editar
                 </button>
-                <button class="btn btn-danger" (click)="eliminar(usuario)">
-                  Eliminar
-                </button>
+                <a class="btn btn-danger" href="admin/usuario/remove/{{ usuario.id }}">
+                  Borrar
+                </a>
               </td>
             </tr>
             } @empty {

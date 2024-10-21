@@ -50,4 +50,12 @@ export class UsuarioService {
     URL += '/' + id;
     return this.oHttp.get<IUsuario>(URL);
   }
+
+  removeUser(id: number): Observable<any> {
+    let URL: string = '';
+    URL += 'http://localhost:8085';
+    URL += '/usuario';
+    URL += '/' + id;
+    return this.oHttp.delete<any>(URL);
+  }
 }
