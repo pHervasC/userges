@@ -6,6 +6,32 @@
 
       <h2>Eliminar usuario</h2>
 
+      <div class="d-flex flex-column">
+        <table class="table table-striped table-bordered my-5" style="table-layout: fixed;width: 100%;word-break: break-all ">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nombre</th>
+              <th>Primer Apellido</th>
+              <th>Segundo Apellido</th>
+              <th>Correo</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td class="text-center">{{ usuario.id }}</td>
+              <td class="text-start">{{ usuario.nombre }}</td>
+              <td class="text-start">{{ usuario.apellido1 }}</td>
+              <td class="text-start">{{ usuario.apellido2 }}</td>
+              <td class="text-start">{{ usuario.email }}</td>
+              </tr>
+          </tbody>
+        </table>
+
+        <div class="row"><div class="col md-2 ">
       <a class="btn btn-primary my-4" href="admin/usuario/plist">Cancelar</a>
 
-      <button class="btn btn-danger my-4" (click)="removeUser()" href="admin/usuario/plist" >Eliminar</button>
+      <button class="btn btn-danger my-4 ms-2" (click)="removeUser()" href="admin/usuario/plist" >Eliminar</button>
+    </div>
+    </div>
